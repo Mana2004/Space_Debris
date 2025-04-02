@@ -6,14 +6,13 @@ int main() {
     FileReader::readFromFile(graph, "input.txt");
     graph.createEdges();
 
-    int startIdx = 0; // Start from the first node
-    vector<int> shortestPathTree = graph.dijkstra(startIdx);
+    vector<int> shortestPathTree = graph.dijkstra(0);
 
     cout << "\nShortest path tree using Dijkstra's Algorithm:" << endl;
     for (size_t i = 0; i < shortestPathTree.size(); ++i) {
         if (shortestPathTree[i] != -1)
             cout << "Node " << i << " <- " << shortestPathTree[i] << endl;
     }
-
+    
     return 0;
 }
