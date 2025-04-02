@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <vector>
 #include "graph.h"
 
@@ -18,8 +19,6 @@ public:
             return;
         }
 
-        graph.addNode(0, 0, 0);
-
         string line;
         while (getline(file, line)) {
             string label;
@@ -28,10 +27,9 @@ public:
 
             stringstream ss(line);
             if (ss >> label >> ch >> x >> ch >> y >> ch >> z) {
-                cout << "Read Node: " << label << " -> (" << x << ", " << y << ", " << z << ")" << endl;
-                graph.addNode(x , y , z );
+                graph.addNode(x, y, z);
             } else {
-                cout << "Failed to parse line: " << line << endl;
+                cerr << "Error: Failed to parse line: " << line << endl;
             }
         }
     }
