@@ -25,25 +25,46 @@ public:
         if (x >= 0 && x < 10 && y >= 0 && y < 10 && z >= 0 && z < 10 && !matrix[x][y][z]) {
             nodes.push_back(new Node(x, y, z));
             matrix[x][y][z] = true;
+            cout << "Added Node " << nodes.size() - 1 << ": (" << x << ", " << y << ", " << z << ")" << endl;
+        } else {
+            cout << "Failed to add Node: (" << x << ", " << y << ", " << z << ") - Already exists or out of bounds." << endl;
         }
-    }    
+    }     
 
-    void addEdge(int idx1, int idx2, double weight) {
+    void addEdge(int idx1, int idx2) {
+        if (idx1 < 0 || idx2 < 0 || idx1 >= static_cast<int>(nodes.size()) || idx2 >= static_cast<int>(nodes.size()) || idx1 == idx2) {
+            cout << "Invalid edge (" << idx1 << ", " << idx2 << ")" << endl;
+            return;
+        }
+        double weight = distance(nodes[idx1], nodes[idx2]);
         adjList[idx1].emplace_back(idx2, weight);
         adjList[idx2].emplace_back(idx1, weight);
-    }
+    }    
 
     double distance(Node* a, Node* b) {
-        return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2) + pow(a->z - b->z, 2)); // Pythagorean distance
+        return sqrt(pow(a->x - b->x, 2) + pow(a->y - b->y, 2) + pow(a->z - b->z, 2));
     }
 
     void createEdges() {
+        if (nodes.size() < 2) {
+            cout << "Not enough nodes to create edges!" << endl;
+            return;
+        }
+
+        cout << "\nCreating edges...\n";
         for (size_t i = 0; i < nodes.size(); ++i) {
             for (size_t j = i + 1; j < nodes.size(); ++j) {
-                double dist = distance(nodes[i], nodes[j]);
-                addEdge(i, j, dist);
-                cout << "Edge created between Node " << i << " and Node " << j << " with weight " << dist << endl;
+                addEdge(i, j);
             }
+        }
+
+        cout << "\nAdjacency List:\n";
+        for (const auto& [key, value] : adjList) {
+            cout << "Node " << key << " -> ";
+            for (const auto& [neighbor, weight] : value) {
+                cout << "(Node " << neighbor << ", Weight " << weight << ") ";
+            }
+            cout << endl;
         }
     }
 
@@ -52,38 +73,52 @@ public:
             cout << "Error: No nodes in the graph!" << endl;
             return {};
         }
-        if (startIdx >= nodes.size()) {
+        if (startIdx < 0 || startIdx >= static_cast<int>(nodes.size())) {
             cout << "Error: Invalid start index!" << endl;
             return {};
         }
     
-        vector<double> dist(nodes.size(), numeric_limits<double>::infinity());
-        vector<int> prev(nodes.size(), -1);
-        priority_queue<pair<double, int>, vector<pair<double, int>>, greater<>> pq;
+        vector<bool> visited(nodes.size(), false);
+        vector<int> shortestPath;
+        
+        int current = startIdx;
+        visited[current] = true;
+        shortestPath.push_back(current);
     
-        dist[startIdx] = 0;
-        pq.emplace(0, startIdx);
+        cout << "\nStarting Dijkstra from Node " << current << endl;
     
-        cout << "Starting Dijkstra from Node " << startIdx << endl;
+        while (shortestPath.size() < nodes.size()) {
+            int nextNode = -1;
+            double minDist = numeric_limits<double>::infinity();
     
-        while (!pq.empty()) {
-            int u = pq.top().second;
-            pq.pop();
-    
-            cout << "Visiting Node " << u << " with current distance " << dist[u] << endl;
-    
-            for (auto& [v, w] : adjList[u]) {
-                double alt = dist[u] + w;
-                if (alt < dist[v]) {
-                    dist[v] = alt;
-                    prev[v] = u;
-                    pq.emplace(alt, v);
-                    cout << "Updating Node " << v << " with new distance " << alt << " via " << u << endl;
+            for (const auto& [neighbor, weight] : adjList[current]) {
+                if (!visited[neighbor] && weight < minDist) {
+                    minDist = weight;
+                    nextNode = neighbor;
                 }
             }
+    
+            if (nextNode == -1) {
+                cout << "Error: Graph might not be fully connected!" << endl;
+                break;
+            }
+    
+            visited[nextNode] = true;
+            shortestPath.push_back(nextNode);
+            cout << "Moving to Node " << nextNode << " with weight " << minDist << endl;
+    
+            current = nextNode;
         }
-        return prev;
-    }    
+    
+        cout << "\nFinal Shortest Path Order:\n";
+        for (int node : shortestPath) {
+            cout << "Node " << node << " -> ";
+        }
+        cout << "End\n";
+    
+        return shortestPath;
+    }              
+
 };
 
 #endif

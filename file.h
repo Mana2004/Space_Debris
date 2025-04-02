@@ -18,16 +18,20 @@ public:
             return;
         }
 
-        graph.addNode(0, 0, 0); 
+        graph.addNode(0, 0, 0);
 
         string line;
         while (getline(file, line)) {
-            int label, x, y, z;
+            string label;
+            int x, y, z;
             char ch;
+
             stringstream ss(line);
             if (ss >> label >> ch >> x >> ch >> y >> ch >> z) {
-                cout << "Read Node: " << label << " -> (" << x-1 << ", " << y-1 << ", " << z-1 << ")" << endl;
-                graph.addNode(x - 1, y - 1, z - 1);
+                cout << "Read Node: " << label << " -> (" << x << ", " << y << ", " << z << ")" << endl;
+                graph.addNode(x , y , z );
+            } else {
+                cout << "Failed to parse line: " << line << endl;
             }
         }
     }
