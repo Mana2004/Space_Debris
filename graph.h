@@ -7,6 +7,7 @@
 #include <cmath>
 #include <limits>
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -51,6 +52,9 @@ public:
     }
     
     vector<int> blindTraversal(int startIdx) {
+
+        clock_t start_time = clock();
+
         int n = nodes.size();
         vector<bool> visited(n, false);
         vector<int> path;
@@ -83,6 +87,9 @@ public:
             current = nextNode;
         }
 
+        clock_t end_time = clock();
+        double duration = double(end_time - start_time) / CLOCKS_PER_SEC * 1000;
+
         cout << "\nBlind Traversal (Avoiding revisits): ";
         for (size_t i = 0; i < path.size(); i++) {
             cout << path[i];
@@ -90,6 +97,7 @@ public:
                 cout << " -> ";
         }
         cout << "\nTotal Traversal Cost: " << totalCost << endl;
+        cout << "Execution Time: " << duration << " ms" << endl;
 
         return path;
     }
