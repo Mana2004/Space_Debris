@@ -12,27 +12,30 @@ using namespace std;
 
 class FileReader {
 public:
-    static void readFromFile(Graph& graph, const string& filename) {
-        ifstream file(filename);
-        if (!file) {
-            cerr << "Error: Could not open the file!" << endl;
-            return;
-        }
+static void readFromFile(Graph& graph, const string& filename) {
+    ifstream file(filename);
+    if (!file) {
+        cerr << "Error: Could not open the file!" << endl;
+        return;
+    }
 
-        string line;
-        while (getline(file, line)) {
-            string label;
-            int x, y, z;
-            char ch;
+    graph.addNode(0, 0, 0);
 
-            stringstream ss(line);
-            if (ss >> label >> ch >> x >> ch >> y >> ch >> z) {
-                graph.addNode(x, y, z);
-            } else {
-                cerr << "Error: Failed to parse line: " << line << endl;
-            }
+    string line;
+    while (getline(file, line)) {
+        string label;
+        int x, y, z;
+        char ch;
+
+        stringstream ss(line);
+        if (ss >> label >> ch >> x >> ch >> y >> ch >> z) {
+            graph.addNode(x, y, z);
+        } else {
+            cerr << "Error: Failed to parse line: " << line << endl;
         }
     }
+}
+
 };
 
 #endif

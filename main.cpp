@@ -13,14 +13,17 @@ int main() {
 
     graph.createEdges();
 
-    vector<int> shortestPathTree = graph.dijkstra(0);
+    int startIndex = 0;
+    vector<int> shortestPathTree = graph.ucs(startIndex);
 
-    cout << "Shortest Path Tree using Dijkstra's Algorithm:\n";
+    cout << "Shortest Path Tree using UCS Algorithm:\n";
     for (size_t i = 0; i < shortestPathTree.size(); ++i) {
-        if (shortestPathTree[i] != -1) {
+        if (i == startIndex) {
+            cout << "Node " << i << " is the starting node" << endl;
+        } else if (shortestPathTree[i] != -1) {
             cout << "Node " << i << " <- " << shortestPathTree[i] << endl;
         } else {
-            cout << "Node " << i << " is unreachable from Node 0" << endl;
+            cout << "Node " << i << " is unreachable from Node " << startIndex << endl;
         }
     }
 

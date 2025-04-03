@@ -30,39 +30,40 @@ public:
     }
 
     void createEdges() {
-        for (size_t i = 0; i < nodes.size(); ++i) {
-            for (size_t j = i + 1; j < nodes.size(); ++j) {
-                double dist = distance(nodes[i], nodes[j]);
-                adjList[i].emplace_back(j, dist);
-                adjList[j].emplace_back(i, dist);
-            }
+        for (size_t i = 0; i + 1 < nodes.size(); ++i) {
+            double dist = distance(nodes[i], nodes[i + 1]);
+            adjList[i].emplace_back(i + 1, dist);
+            adjList[i + 1].emplace_back(i, dist);
         }
     }
+    
 
-    vector<int> dijkstra(int startIdx) {
-        vector<double> dist(nodes.size(), numeric_limits<double>::infinity());
+    vector<int> ucs(int startIdx) {
+        vector<double> cost(nodes.size(), numeric_limits<double>::infinity());
         vector<int> prev(nodes.size(), -1);
         priority_queue<pair<double, int>, vector<pair<double, int>>, greater<>> pq;
-
-        dist[startIdx] = 0;
+    
+        cost[startIdx] = 0;
+        prev[startIdx] = startIdx; // Set the start node's predecessor to itself
         pq.emplace(0, startIdx);
-
+    
         while (!pq.empty()) {
-            int u = pq.top().second;
+            auto [currCost, u] = pq.top();
             pq.pop();
-
+    
             for (auto& [v, w] : adjList[u]) {
-                double alt = dist[u] + w;
-                if (alt < dist[v]) {
-                    dist[v] = alt;
+                double newCost = currCost + w;
+                if (newCost < cost[v]) {
+                    cost[v] = newCost;
                     prev[v] = u;
-                    pq.emplace(alt, v);
+                    pq.emplace(newCost, v);
                 }
             }
         }
-
+    
         return prev;
     }
+    
 };
 
 #endif
