@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
     Graph graph;
-    
+
     FileReader::readFromFile(graph, "input.txt");
 
     if (graph.nodes.empty()) {
@@ -20,5 +20,8 @@ int main() {
 
     graph.blindTraversal(0);
 
+    FileReader::exportGraphData(graph);
+
     return 0;
 }
+
