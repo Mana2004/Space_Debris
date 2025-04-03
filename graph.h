@@ -90,7 +90,7 @@ public:
         clock_t end_time = clock();
         double duration = double(end_time - start_time) / CLOCKS_PER_SEC * 1000;
 
-        cout << "\nBlind Traversal (Avoiding revisits): ";
+        cout << "\nBlind Traversal : ";
         for (size_t i = 0; i < path.size(); i++) {
             cout << path[i];
             if (i < path.size() - 1)
