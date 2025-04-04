@@ -20,6 +20,7 @@ public:
 
     vector<Node*> nodes;
     unordered_map<int, vector<pair<int, double>>> adjList;
+    vector<pair<int, int>> traversalPath;
 
     void addNode(int x, int y, int z) {
         nodes.push_back(new Node(x, y, z));
@@ -52,22 +53,23 @@ public:
     }
     
     vector<int> blindTraversal(int startIdx) {
-
         clock_t start_time = clock();
-
+    
         int n = nodes.size();
         vector<bool> visited(n, false);
         vector<int> path;
         double totalCost = 0.0;
-
+    
+        traversalPath.clear();
+    
         int current = startIdx;
         path.push_back(current);
         visited[current] = true;
-
+    
         while (path.size() < n) {
             double minCost = numeric_limits<double>::infinity();
             int nextNode = -1;
-
+    
             for (auto &edge : adjList[current]) {
                 int neighbor = edge.first;
                 double cost = edge.second;
@@ -76,20 +78,21 @@ public:
                     nextNode = neighbor;
                 }
             }
-
+    
             if (nextNode == -1) {
                 break;
             }
-
+    
             visited[nextNode] = true;
+            traversalPath.emplace_back(current, nextNode);
             path.push_back(nextNode);
             totalCost += minCost;
             current = nextNode;
         }
-
+    
         clock_t end_time = clock();
         double duration = double(end_time - start_time) / CLOCKS_PER_SEC * 1000;
-
+    
         cout << "\nBlind Traversal : ";
         for (size_t i = 0; i < path.size(); i++) {
             cout << path[i];
@@ -98,9 +101,10 @@ public:
         }
         cout << "\nTotal Traversal Cost: " << totalCost << endl;
         cout << "Execution Time: " << duration << " ms" << endl;
-
+    
         return path;
     }
+    
 };
 
 #endif
