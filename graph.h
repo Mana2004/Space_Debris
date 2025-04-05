@@ -100,7 +100,7 @@ public:
                 cout << " -> ";
         }
         cout << "\nTotal Traversal Cost: " << totalCost << endl;
-        cout << "Execution Time: " << duration << " ms" << endl;
+        cout << "Time: " << duration << " ms" << endl;
     
         return path;
     }

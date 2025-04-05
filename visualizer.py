@@ -40,25 +40,25 @@ def plot_3d_graph(nodes, edges, paths):
     ax = fig.add_subplot(111, projection='3d')
 
     for node_id, (x, y, z) in nodes.items():
-        ax.scatter(x, y, z, color="blue", s=30)
-        ax.text(x, y, z, f"{node_id}", color="red", fontsize=16)
+        ax.scatter(x, y, z, color="royalblue", s=30)
+        ax.text(x, y, z, f"{node_id}", color="black", fontsize=16)
 
     for u, v in edges:
         x_vals = [nodes[u][0], nodes[v][0]]
         y_vals = [nodes[u][1], nodes[v][1]]
         z_vals = [nodes[u][2], nodes[v][2]]
-        ax.plot(x_vals, y_vals, z_vals, color="black", linestyle="dotted", linewidth=0.8)
+        ax.plot(x_vals, y_vals, z_vals, color="dodgerblue", linestyle="dotted", linewidth=1.0)
 
     for u, v in paths:
         x_vals = [nodes[u][0], nodes[v][0]]
         y_vals = [nodes[u][1], nodes[v][1]]
         z_vals = [nodes[u][2], nodes[v][2]]
-        ax.plot(x_vals, y_vals, z_vals, color="green", linewidth=3)
+        ax.plot(x_vals, y_vals, z_vals, color="purple", linewidth=1.5)
 
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
-    ax.set_title("3D Graph with Traversal Path")
+    ax.set_title("3D Graph Visualizer")
 
     plt.show()
 
